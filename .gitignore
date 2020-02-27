@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+main
+
+#output text
+Output/*.txt
+
+.DS_store
+
+.vs/
+.vscode/

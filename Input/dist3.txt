@@ -1,0 +1,13 @@
+#denotes a line comment
+#Precede Mean matrix with M, Covariance matrix with C or S
+#Terminate the matrix with *
+
+M:
+4
+4
+*
+
+S:
+4	0
+0	8
+*
