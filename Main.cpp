@@ -2,7 +2,7 @@
 #include <fstream>
 #include "Distribution.hpp"
 #include "Classifier.hpp"
-#include "Image.hpp"
+#include "Image_old.hpp"
 #include <thread>
 
 int main()

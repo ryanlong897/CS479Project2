@@ -1,36 +1,39 @@
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef IMAGE_HPP_
+#define IMAGE_HPP_
 
 #include <string>
+#include <fstream>
+#include <iostream>
 
-class Image {
+
+class Image
+{
     private:
-        const int NUM_COLOURS = 3; // for RGB
-        int N, M, Q;
-        bool type;
-        int colourSpace = 0; // 0 for RGB, 1 for the other one  
-        int **pixelValue[3];
+        size_t m_width;
+        size_t m_height;
+        size_t m_colorDepth;
+
+        // for black and white images, only the red array is used
+        int** m_red;
+        int** m_green;
+        int** m_blue;
+
+        int m_imageType;
+
+        static int m_ID;
+
+        void ReadImageHeader(std::string fileName);
+        void ResizeImage(int width, int height, int colorDepth);
+        void ReadImage(std::string fileName);
 
     public:
         Image();
-        Image(int, int, int);
-        Image(Image&);
-        Image operator= (Image& other);
+        Image(std::string fileName);
+        Image(Image& other);
         ~Image();
-        void getImageInfo(int&, int&, int&);
-        void setImageInfo(int, int, int);
-        void setPixelVal(int c, int, int, int);
-        void getPixelVal(int c, int, int, int&);
+
+        // return the value of the pixel at the spcified row, col, and colour array. For black and white images, the colour array is 0
+        int GetPixelValue(int row, int col, int color = 0);
 };
 
-class ImageParser
-{
-    private:
-
-    public: 
-        static int WriteImage(std::string fname, Image& image);
-        static int ReadImage(std::string fname, Image& image);
-        static int ReadImageHeader(std::string fname, int& N, int& M, int& Q, bool& type);
-};
-
-#endif
+#endif //IMAGE_HPP_
