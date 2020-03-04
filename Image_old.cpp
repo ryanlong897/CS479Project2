@@ -264,4 +264,3 @@ void Image::getPixelVal(int c, int i, int j, int& val)
 {
  val = pixelValue[c][i][j];
 }
-

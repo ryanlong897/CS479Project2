@@ -2,17 +2,17 @@
 #include <fstream>
 #include "Distribution.hpp"
 #include "Classifier.hpp"
-#include "Image_old.hpp"
+#include "Image.hpp"
 #include <thread>
 
 int main()
 {   
-    int m, n, q;
-    bool type;
-    ImageParser::ReadImageHeader("Input/Training_3.ppm", n, m, q, type);
-    Image image(n, m, q);
-    ImageParser::ReadImage("Input/Training_3.ppm", image);
-    ImageParser::WriteImage("Output/test.ppm", image);
-
+    // int m, n, q;
+    // bool type;
+    // ImageParser::ReadImageHeader("Input/Training_3.ppm", n, m, q, type);
+    // Image image(n, m, q);
+    // ImageParser::ReadImage("Input/Training_3.ppm", image);
+    // ImageParser::WriteImage("Output/test.ppm", image);
+    Image<RGB> image("Training_1.ppm");
     return 0;
 }
