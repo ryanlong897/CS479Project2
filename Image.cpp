@@ -73,14 +73,13 @@ void Image<T>::SetPixelValue(int row, int col, T data)
 }
 
 template <typename T>
-void Image<T>::ReadImageHeader(std::string fileName)
-{
-
-}
-
-template <typename T>
 void Image<T>::ResizeImage(int width, int height, int colorDepth)
 {
+    if (m_pixels != nullptr)
+    {
+        ClearImageData();
+    }
+    
     m_pixels = new T*[m_height];
     for (size_t i = 0; i < m_height; i++)
     {
@@ -91,6 +90,11 @@ void Image<T>::ResizeImage(int width, int height, int colorDepth)
 template <typename T>
 void Image<T>::ReadImage(std::string fileName)
 {
+    if (m_pixels != nullptr)
+    {
+        ClearImageData();
+    }
+
     unsigned char* buffer;
 
     std::ifstream input;
@@ -108,30 +112,30 @@ void Image<T>::ReadImage(std::string fileName)
 
     if (line[0] != 'P' || line.length() < 2)
     {
-        std::cerr << "File type not supported" << std::endl;
+        std::cerr << "File type not supported, or header format is wrong" << std::endl;
         exit(1);
     }
         
     switch (line[1])
     {
-    case '1':
-    case '4':
-        m_type = PBM;
-        break;
-    case '2':
-    case '5':
-        m_type = PGM;
-        break;
-    case '3':
-    case '6':
-        m_type = PPM;
-        break;
-    default:
-        std::cerr << "File type not recognized" << std::endl;
-        exit(1);
+        case '1':
+        case '4':
+            m_type = PBM;
+            break;
+        case '2':
+        case '5':
+            m_type = PGM;
+            break;
+        case '3':
+        case '6':
+            m_type = PPM;
+            break;
+        default:
+            std::cerr << "File type not recognized" << std::endl;
+            exit(1);
     }
 
-    bool headerRead = false;
+    bool isHeaderComplete = false;
     do
     {
         std::string temp;
@@ -145,6 +149,7 @@ void Image<T>::ReadImage(std::string fileName)
             }
             split.push_back(temp);
         }
+
         for (size_t i = 0; i < split.size(); i++)
         {
             if (m_width == 0)
@@ -158,22 +163,21 @@ void Image<T>::ReadImage(std::string fileName)
             else if (m_colorDepth == 0)
             {
                 m_colorDepth = std::atoi(split[i].c_str());
-                headerRead = true;
+                isHeaderComplete = true;
                 continue;
             }
         }
-        if (!headerRead)
+        if (!isHeaderComplete)
         {
             std::getline(input, line);
         }
-    } while (!headerRead);
+    } while (!isHeaderComplete);
 
     ResizeImage(m_width, m_height, m_colorDepth);
 
     size_t size = m_height * m_width * (m_type == PPM ? 3 : 1);
     buffer = (unsigned char*) new unsigned char[size];
     input.read(reinterpret_cast<char *>(buffer), size * sizeof(unsigned char));
-
 
     if (input.fail())
     {
@@ -193,15 +197,8 @@ void Image<T>::ReadImage(std::string fileName)
                 r = (int)buffer[height * m_width + width];
                 g = (int)buffer[height * m_width + width + 1];
                 b = (int)buffer[height * m_width + width + 2];
-                try
-                {
-                    SetPixelValue(height, width/3, T(r, g, b));
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << "Type does not contain a constructor that takes three arguments" << std::endl;
-                    exit(1);
-                }
+
+                SetPixelValue(height, width/3, T(r, g, b));
             }
         }
     }
@@ -213,18 +210,12 @@ void Image<T>::ReadImage(std::string fileName)
             for (size_t width = 0; width < m_width; width++)
             {
                 c = (int)buffer[height * m_width + width];
-                try
-                {
-                    SetPixelValue(height, width, T(c, c, c));
-                }
-                catch (const std::exception& e)
-                {
-                    std::cerr << "Type does not contain a constructor that takes three arguments" << std::endl;
-                    exit(1);
-                }
+
+                SetPixelValue(height, width, T(c, c, c));
             }
         }
     }
+
     delete[] buffer;
 }
 

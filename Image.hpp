@@ -39,7 +39,7 @@ struct YCrCb
         cr = cr_;
         cb = cb_;
     }
-    
+
     YCrCb& operator=(YCrCb& other)
     {
         y = other.y;
@@ -73,9 +73,7 @@ class Image
 
         static size_t m_IDGen;
 
-        void ReadImageHeader(std::string fileName);
         void ResizeImage(int width, int height, int colorDepth);
-        void ReadImage(std::string fileName);
         void ClearImageData();
 
     public:
@@ -84,11 +82,11 @@ class Image
         Image(Image& other);
         ~Image();
 
-        // return the value of the pixel at the spcified row, col, and colour array. For black and white images, the colour array is 0
         T GetPixelValue(int row, int col);
         void SetPixelValue(int row, int col, T data);
         void WriteImage(std::string fileName);
         void PrintInfo();
+        void ReadImage(std::string fileName);
 };
 
 #include "Image.cpp"
