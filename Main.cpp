@@ -1,18 +1,21 @@
 #include <iostream>
 #include <fstream>
+#include <thread>
 #include "Distribution.hpp"
 #include "Classifier.hpp"
 #include "Image.hpp"
-#include <thread>
 
-int main()
+int main(int argc, char* argv[])
 {   
-    // int m, n, q;
-    // bool type;
-    // ImageParser::ReadImageHeader("Input/Training_3.ppm", n, m, q, type);
-    // Image image(n, m, q);
-    // ImageParser::ReadImage("Input/Training_3.ppm", image);
-    // ImageParser::WriteImage("Output/test.ppm", image);
-    Image<RGB> image("Training_1.ppm");
+    Image image;
+    if (argc > 1)
+    {
+        image.ReadImage(argv[1]);
+    }
+    else 
+    {
+        image.ReadImage("Training_1.ppm");
+    }
+    image.WriteImage("test1.ppm");
     return 0;
 }

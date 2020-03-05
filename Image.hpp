@@ -17,7 +17,6 @@ struct RGB
         green = g; 
         blue = b; 
     }
-
     RGB& operator= (RGB& other) 
     { 
         red = other.red; 
@@ -57,7 +56,6 @@ enum ImageType: int
     PPM
 };
 
-template <typename T>
 class Image
 {
     private:
@@ -69,7 +67,7 @@ class Image
         ImageType m_type;
 
         // [height][width]
-        T** m_pixels;
+        RGB** m_pixels;
 
         static size_t m_IDGen;
 
@@ -82,13 +80,11 @@ class Image
         Image(Image& other);
         ~Image();
 
-        T GetPixelValue(int row, int col);
-        void SetPixelValue(int row, int col, T data);
+        RGB GetPixelValue(int row, int col);
+        void SetPixelValue(int row, int col, RGB data);
         void WriteImage(std::string fileName);
         void PrintInfo();
         void ReadImage(std::string fileName);
 };
-
-#include "Image.cpp"
 
 #endif //IMAGE_HPP_
