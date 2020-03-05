@@ -27,7 +27,7 @@ Distribution::Distribution(size_t dimensions, Mat<double> meanMatrix, Mat<double
  * Constructor but for when data is in a file
  * @param dimensions the dimesnionality of the distribution (i.e. how many variables)
  * @param inputFileName the name or file path of the file to load data from
- * @param name the name of the distribution (optional)
+ * @param name the name of the distribution
  * 
  * @brief reads data from a specially formatted input file and populates the matrices accordingly
  */ 
@@ -53,6 +53,13 @@ Distribution::Distribution(int dimensions, std::string inputFileName, std::strin
 	}
 }
 
+/**
+ * Constructor for when data will be added at a later time
+ * @param dimensions the dimensionality of the distribution
+ * @param name the name of the distribution
+ * 
+ * @brief initializes all values to default, expects that data will be added through the import data function later
+ */ 
 Distribution::Distribution(int dimensions, std::string name)
 	:m_id(s_idGen++),
 	m_name(name == "" ? std::to_string(m_id) : name),
@@ -261,21 +268,49 @@ size_t Distribution::GetID()
 	return m_id;
 }
 
+/**
+ * Get name
+ * @return the name of the distribution
+ */ 
 std::string Distribution::GetName()
 {
 	return m_name;
 }
 
+/**
+ * Get Info
+ * @brief prints all info about the distribution in a uniform format
+ */ 
 std::string Distribution::GetInfo()
 {
 	return (std::string)("\"" + m_name + "\" [id: " + std::to_string(m_id) + "]");
 }
 
+/**
+ * Add data 
+ * @param data a vector with dimensions m_dimensions
+ * 
+ * @brief adds data from vector data to the m_data vector in the class
+ */ 
 void Distribution::AddData(std::vector<double> data)
 {
-	m_data.push_back(data);
+	if (data.size() == m_dimensions)
+	{
+		m_data.push_back(data);
+	}
+	else 
+	{
+		throw std::logic_error("Data must have the same dimensionality as the containing distribution\n");
+	}
 }
 
+/**
+ * Import Data
+ * @param inputFilePath the full path to the data to be imported
+ * 
+ * @brief reads the specified file's data into the distribution's inner data storage. 
+ * 		  Note: assumes that the first line of the file is a header line, and skips it
+ */ 
 void Distribution::ImportData(std::string inputFilePath)
 {
 	std::ifstream input;
@@ -287,7 +322,7 @@ void Distribution::ImportData(std::string inputFilePath)
 		exit(1);
 	}
 
-	// need to get rid of the top line of the file
+	// need to get rid of the top line of the file (its saved with a header)
 	std::string trash;
 	std::getline(input, trash);
 
@@ -305,13 +340,21 @@ void Distribution::ImportData(std::string inputFilePath)
 			}			
 			buffer.push_back(std::stod(temp));
 		}
-		m_data.push_back(std::vector<double>(buffer));
+		if (buffer.size() == m_dimensions)
+		{
+			m_data.push_back(std::vector<double>(buffer));
+		}
 	}
 
 	input.close();
-	std::cout << "data imported successfully!" << std::endl;
 }
 
+/**
+ * Get Mean
+ * @param variable the index of the dimension variable to get the mean for
+ * @brief calculates the mean of the variable (dimension) specified
+ * @return the mean of the data
+ */ 
 double Distribution::GetMean(size_t variable)
 {
 	if (variable >= m_dimensions)
@@ -321,16 +364,21 @@ double Distribution::GetMean(size_t variable)
 	}
 
 	double mean = 0;
-	std::cout << m_data.size() << std::endl;
 	for (size_t i = 0; i < m_data.size(); i++)
 	{
-		// std::cout << i << " " << mean << std::endl;
 		mean += m_data[i][variable];
 	}
 	return mean / m_data.size();
-	std::cout << "Mean got good" << std::endl;
 }
 
+/**
+ * Get Covariance
+ * @param var1 the first variable index
+ * @param var2 the second variable index
+ * 
+ * @brief calculates the covariance of the data with respect to variables 1 and 2
+ * @return the covariance of the data
+ */ 
 double Distribution::GetCovariance(size_t var1, size_t var2)
 {
 	if (var1 >= m_dimensions || var2 >= m_dimensions)
@@ -347,9 +395,12 @@ double Distribution::GetCovariance(size_t var1, size_t var2)
 	}
 
 	return covariance / m_data.size();
-	std::cout << "Covariance good" << std::endl;
 }
 
+/**
+ * Get Matrices From Data
+ * @brief Calculates the mean and covariance for the datasets present in the m_data storage
+ */ 
 void Distribution::GetMatricesFromData()
 {
 	for (size_t i = 0; i < m_dimensions; i++)
@@ -364,7 +415,6 @@ void Distribution::GetMatricesFromData()
 			m_covarianceMatrix(i, j) = GetCovariance(i, j);
 		}
 	}
-	std::cout << "matrices good " << std::endl;
 }
 
 #endif //DISTRIBUTION_CPP_

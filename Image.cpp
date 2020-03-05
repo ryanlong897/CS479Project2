@@ -10,6 +10,10 @@
 
 size_t Image::m_IDGen = 0;
 
+/**
+ * Default Constructor 
+ * @brief initialises all variables to default values
+ */ 
 Image::Image()
     :m_width(0),
      m_height(0),
@@ -20,6 +24,11 @@ Image::Image()
 {
 }
 
+/**
+ * "Import" constructor
+ * @param fileName the name of the image file to import
+ * @brief reads the image file and populates the class variables right from the image file
+ */ 
 Image::Image(std::string fileName)
     :m_width(0),
      m_height(0),
@@ -31,6 +40,11 @@ Image::Image(std::string fileName)
     ReadImage(fileName);
 }
 
+/**
+ * Copy constructor 
+ * @param other the image to be copied
+ * @brief makes a deep copy of image other
+ */ 
 Image::Image(Image& other)
     :m_width(other.m_width),
      m_height(other.m_height),
@@ -49,22 +63,44 @@ Image::Image(Image& other)
     }
 }
 
+/**
+ * Destructor
+ */ 
 Image::~Image()
 {
     ClearImageData();
 }
 
-// return the value of the pixel at the spcified row, col, and colour array. For black and white images, the colour array is 0
+/**
+ * Get Pixel Value
+ * @brief gets the RGB value at the specified index
+ * @param row the row to get the data from
+ * @param col the column to get the data from
+ * @return the RGB value at the given location
+ */ 
 RGB Image::GetPixelValue(int row, int col)
 {
     return m_pixels[row][col];
 }
 
+/**
+ * Set Pixel Value 
+ * @param row the row
+ * @param col the column
+ * @param data the RGB value to set the pixel to
+ */ 
 void Image::SetPixelValue(int row, int col, RGB data)
 {
     m_pixels[row][col] = data;
 }
 
+/**
+ * Resize image
+ * @param width the new width
+ * @param height the new height
+ * @param colourDepth the new colour depth
+ * @brief clears the image contents (if there is something there) and resizes the image array to the specified size
+ */ 
 void Image::ResizeImage(int width, int height, int colorDepth)
 {
     if (m_pixels != nullptr)
@@ -79,6 +115,11 @@ void Image::ResizeImage(int width, int height, int colorDepth)
     }
 }
 
+/**
+ * Read image
+ * @param fileName the image file to be read
+ * @brief reads the image file specified 
+ */ 
 void Image::ReadImage(std::string fileName)
 {
     if (m_pixels != nullptr)
@@ -106,7 +147,8 @@ void Image::ReadImage(std::string fileName)
         std::cerr << "File type not supported, or header format is wrong" << std::endl;
         exit(1);
     }
-        
+    
+    //set image type depending on header
     switch (line[1])
     {
         case '1':
@@ -126,6 +168,8 @@ void Image::ReadImage(std::string fileName)
             exit(1);
     }
 
+    // Read the rest of the header, taking into account that information could be in a variety of locations
+    // e.g. on the same line or on different lines
     bool isHeaderComplete = false;
     do
     {
@@ -164,6 +208,7 @@ void Image::ReadImage(std::string fileName)
         }
     } while (!isHeaderComplete);
 
+    //get the image properties ready to be read
     ResizeImage(m_width, m_height, m_colourDepth);
 
     size_t size = m_height * m_width * (m_type == PPM ? 3 : 1);
@@ -178,6 +223,7 @@ void Image::ReadImage(std::string fileName)
 
     input.close();
 
+    //Convert from raw format to integers
     if (m_type == PPM)
     {
         int r, g, b;
@@ -210,6 +256,11 @@ void Image::ReadImage(std::string fileName)
     delete[] buffer;
 }
 
+/**
+ * Write image
+ * @param fileName the file to write image data to
+ * @brief writes the contents of the image array to the specified file
+ */ 
 void Image::WriteImage(std::string fileName)
 {
     std::ofstream output;
@@ -221,6 +272,7 @@ void Image::WriteImage(std::string fileName)
         exit(1);
     }
 
+    //set the header appropriately
     switch (m_type)
     {
         case PPM:
@@ -244,6 +296,7 @@ void Image::WriteImage(std::string fileName)
 
     buffer = (unsigned char*) new unsigned char[size];
 
+    //convert the integer values into raw data
     if (m_type == PPM)
     {
         for (size_t height = 0; height < m_height; height++)
@@ -269,6 +322,7 @@ void Image::WriteImage(std::string fileName)
         }
     }
 
+    //write it
     output.write(reinterpret_cast<char *>(buffer), size * sizeof(unsigned char));
 
     if (output.fail()) {
@@ -282,6 +336,10 @@ void Image::WriteImage(std::string fileName)
 
 }
 
+/**
+ * Print Info 
+ * @brief prints debug info about the image
+ */ 
 void Image::PrintInfo()
 {
     std::cout << "Width:\t" << m_width << std::endl;
@@ -290,6 +348,10 @@ void Image::PrintInfo()
     std::cout << "Type:\t" << m_type << std::endl;
 }
 
+/**
+ * Clear image data
+ * @brief deleted dynamic memory stored by the image
+ */ 
 void Image::ClearImageData()
 {
     for (size_t i = 0; i < m_height; i++)
@@ -299,6 +361,10 @@ void Image::ClearImageData()
     delete[] m_pixels;
 }
 
+/**
+ * Normalize colour
+ * @brief changes the default RGB colours into normalized RGB colours 
+ */ 
 void Image::NormalizeColour()
 {
     for (size_t i = 0; i < m_height; i++)

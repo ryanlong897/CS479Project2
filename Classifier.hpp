@@ -2,6 +2,7 @@
 #define CLASSIFIER_H_
 
 #include "Distribution.hpp"
+#include "Image.hpp"
 #include <vector>
 
 class Classifier
@@ -18,6 +19,7 @@ class Classifier
         Classifier(std::vector<double> priors, std::vector<Distribution> classes);
         ~Classifier();
         void ClassifyTwoClasses(std::string outputFile, int classificationMethod = 0);
+        void ClassifyImage(Image& image, std::string outputImageName, double threshold);
         double CalculateBhattacharyyaBound();
 };
 

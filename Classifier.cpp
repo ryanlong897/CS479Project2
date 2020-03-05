@@ -224,22 +224,13 @@ double Classifier::CalculateBhattacharyyaBound() {
     
     meanDiff = m_classes[0].m_meanMatrix - m_classes[1].m_meanMatrix;
     betaTimesCov1PlusCov2 = (1 - beta) * m_classes[0].m_covarianceMatrix + beta * m_classes[1].m_covarianceMatrix;
-    
-    /* m_classes[0].m_meanMatrix.print();
-    m_classes[1].m_meanMatrix.print();
-    
-    m_classes[0].m_covarianceMatrix.print();
-    m_classes[1].m_covarianceMatrix.print();
-     */
      
     firstTermMatrix = (beta * beta / 2) * meanDiff.t() * betaTimesCov1PlusCov2.i() * meanDiff;
         
     firstTerm = firstTermMatrix(0);
         
     secondTerm = .5 * log ( det(betaTimesCov1PlusCov2) / (pow(det(m_classes[0].m_covarianceMatrix) * det(m_classes[1].m_covarianceMatrix), beta) ));
-    
-    // std::cout << "first term: " << firstTerm << endl << "second term: " << secondTerm << endl;
-    
+        
     k = firstTerm + secondTerm;
     
     std::cout << "k = " << k << endl;

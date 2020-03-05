@@ -12,12 +12,12 @@
 #include <armadillo>
 
 using namespace arma;
+const std::string INPUT_DIRECTORY = "Input/";
+const std::string OUTPUT_DIRECTORY = "Output/";
 
 class Distribution
 {
     private:
-        const std::string INPUT_DIRECTORY = "Input/";
-        const std::string OUTPUT_DIRECTORY = "Output/";
         // Data Members
         const size_t m_id;
         std::string m_name;
