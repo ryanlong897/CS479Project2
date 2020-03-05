@@ -5,46 +5,72 @@
 #include "Classifier.hpp"
 #include "Image.hpp"
 
+
 void GetMaskedImagePixelData(Image& mask, Image& image, Distribution& dist);
 
 int main(int argc, char* argv[])
 {   
-    /**
-     * Part 2 stuff
-     */ 
-    std::vector<double> priors;
-    priors.push_back(.5);
-    priors.push_back(.5);
-
-    Image mask, trainingImage;
-    mask.ReadImage("ref3.ppm");
-    trainingImage.ReadImage("Training_3.ppm");
-    Distribution skin(3, "skinColour");
-    Distribution test(3, "possibly skin colour");
-
-    std::vector<Distribution> classes;
-    classes.push_back(skin);
-    classes.push_back(test);
-
-
-    trainingImage.NormalizeColour();
-    GetMaskedImagePixelData(mask, trainingImage, skin);
-
-    skin.GetMatricesFromData();
-    skin.PrintAll();
-    test.PrintAll();
-
-    // TODO: Implement the threshold classifier 
-    // TODO: Modify the image or classifier class to handle thresholds rather than just comparing against another class
+    int part = 0;
+    if (argc > 1)
+    {
+        part = atoi(argv[1]);
+    }
 
     /**
      * Part 1 stuff
-     */ 
+     */
+    if (part == 1 || part == 0)
+    {
+        Distribution dist0(2, "Original dist 1");
+        Distribution dist1(2, "Original dist 2");
 
-    // Distribution dist(2, "Output0");
-    // dist.ImportData("Input/dist0_output.txt");
-    // dist.GetMatricesFromData();
-    // dist.PrintAll();
+        dist0.ImportData(INPUT_DIRECTORY + "dist0_output.txt");
+        dist1.ImportData(INPUT_DIRECTORY + "dist1_output.txt");
+
+        dist0.GetMatricesFromData();
+        dist1.GetMatricesFromData();
+
+        dist0.PrintAll();
+        dist1.PrintAll();
+
+        std::vector<Distribution> distributions;
+        distributions.push_back(dist0);
+        distributions.push_back(dist1);
+
+        Classifier classifier(distributions);
+        classifier.ClassifyTwoClasses("ClassificationResults.txt");
+        classifier.CalculateDecisionBoundary();
+        classifier.CalculateBhattacharyyaBound();
+    }
+
+    /**
+     * Part 2 stuff
+     */ 
+    if (part == 2 || part == 0)
+    {
+        Image mask, trainingImage;
+        mask.ReadImage("ref3.ppm");
+        trainingImage.ReadImage("Training_3.ppm");
+
+        Distribution skin(3, "skinColour");
+        Distribution test(3, "possibly skin colour");
+
+        std::vector<Distribution> classes;
+        classes.push_back(skin);
+        classes.push_back(test);
+
+
+        trainingImage.NormalizeColour();
+        GetMaskedImagePixelData(mask, trainingImage, skin);
+
+        skin.GetMatricesFromData();
+        skin.PrintAll();
+        test.PrintAll();
+
+        // TODO: Implement the threshold classifier 
+        // TODO: Modify the image or classifier class to handle thresholds rather than just comparing against another class
+    }
+
     return 0;
 }
 

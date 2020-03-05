@@ -15,8 +15,15 @@ void Classifier::CalculateDecisionBoundary()
  * @param priors a vector representing the prior probablility for the classes
  * @param classes a vector containing the classes as distributions
  */ 
-Classifier::Classifier(std::vector<double> priors, std::vector<Distribution> classes)
+Classifier::Classifier(std::vector<Distribution> classes, std::vector<double> priors)
 {
+    if (priors.empty())
+    {
+        for (size_t i = 0; i < classes.size(); i++)
+        {
+            priors.push_back( 1.0 / classes.size());
+        }
+    }
     if (priors.size() != classes.size())
     {
         throw std::logic_error("There must be an equal amount of prior probabilities as there are classes\n");

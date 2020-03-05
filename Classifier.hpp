@@ -16,7 +16,7 @@ class Classifier
         void QuadraticDiscriminant(std::vector<mat>& W, std::vector<mat>& w, std::vector<double>& w0);
     public:
         void CalculateDecisionBoundary();
-        Classifier(std::vector<double> priors, std::vector<Distribution> classes);
+        Classifier(std::vector<Distribution> classes, std::vector<double> priors = std::vector<double>() );
         ~Classifier();
         void ClassifyTwoClasses(std::string outputFile, int classificationMethod = 0);
         void ClassifyImage(Image& image, std::string outputImageName, double threshold);
