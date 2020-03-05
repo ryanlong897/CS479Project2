@@ -20,6 +20,11 @@ int main(int argc, char* argv[])
     }
     image.NormalizeColour();
     image.WriteImage("test1.ppm");
+
+    Distribution dist(2, "Output0");
+    dist.ImportData("Input/dist0_output.txt");
+    dist.GetMatricesFromData();
+    dist.PrintAll();
     return 0;
 }
 

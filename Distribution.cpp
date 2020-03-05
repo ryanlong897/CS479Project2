@@ -287,6 +287,11 @@ void Distribution::ImportData(std::string inputFilePath)
 		exit(1);
 	}
 
+	// need to get rid of the top line of the file
+	std::string trash;
+	std::getline(input, trash);
+
+	// read the data
 	while (!input.eof())
 	{
 		std::vector<double> buffer;
@@ -294,13 +299,72 @@ void Distribution::ImportData(std::string inputFilePath)
 		{
 			std::string temp;
 			input >> temp;
+			if (temp == "" || temp == "\n" || temp == "\t")
+			{
+				continue;
+			}			
 			buffer.push_back(std::stod(temp));
 		}
 		m_data.push_back(std::vector<double>(buffer));
 	}
 
 	input.close();
+	std::cout << "data imported successfully!" << std::endl;
 }
 
+double Distribution::GetMean(size_t variable)
+{
+	if (variable >= m_dimensions)
+	{
+		std::cerr << "variable index must be less than the total number of dimensions (its an index)" << std::endl;
+		exit(1);
+	}
+
+	double mean = 0;
+	std::cout << m_data.size() << std::endl;
+	for (size_t i = 0; i < m_data.size(); i++)
+	{
+		// std::cout << i << " " << mean << std::endl;
+		mean += m_data[i][variable];
+	}
+	return mean / m_data.size();
+	std::cout << "Mean got good" << std::endl;
+}
+
+double Distribution::GetCovariance(size_t var1, size_t var2)
+{
+	if (var1 >= m_dimensions || var2 >= m_dimensions)
+	{
+		std::cerr << "variable index must be less than the total number of dimensions (its an index)" << std::endl;
+		exit(1);
+	}
+
+	double covariance = 0;
+
+	for (size_t i = 0; i < m_data.size(); i++)
+	{
+		covariance += (m_data[i][var1] - m_meanMatrix(var1)) * (m_data[i][var2] - m_meanMatrix(var2));
+	}
+
+	return covariance / m_data.size();
+	std::cout << "Covariance good" << std::endl;
+}
+
+void Distribution::GetMatricesFromData()
+{
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		m_meanMatrix(i) = GetMean(i);
+	}
+
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		for (size_t j = 0; j < m_dimensions; j++)
+		{
+			m_covarianceMatrix(i, j) = GetCovariance(i, j);
+		}
+	}
+	std::cout << "matrices good " << std::endl;
+}
 
 #endif //DISTRIBUTION_CPP_

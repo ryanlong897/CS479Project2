@@ -27,6 +27,8 @@ class Distribution
         void ImportMatrices(std::string inputFileName, int dimensions);
         double RandomNumberHelper();
         double BoxMuller(double m, double s);
+        double GetMean(size_t variable);
+        double GetCovariance(size_t var1, size_t var2);
 
     public:
         const size_t m_dimensions;
