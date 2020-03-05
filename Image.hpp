@@ -29,25 +29,25 @@ struct RGB
     bool IsBlack() { return red == 0 && green == 0 && blue == 0; }
 };
 
-// Currently not used, may require a templateing of the image class, which would be a pain in the ass 😒
-struct YCrCb 
+// Currently not used, may require a templateing of the image class
+struct YCbCr 
 {
     int y;
     int cr;
     int cb;
-    YCrCb(){}
-    YCrCb(int y_, int cr_, int cb_) 
+    YCbCr(){}
+    YCbCr(int y_, int cb_, int cr_) 
     {
         y = y_;
-        cr = cr_;
         cb = cb_;
+        cr = cr_;
     }
 
-    YCrCb& operator=(YCrCb& other)
+    YCbCr& operator=(YCbCr& other)
     {
         y = other.y;
-        cr = other.cr;
         cb = other.cb;
+        cr = other.cr;
         return *this;
     }
 }; 
