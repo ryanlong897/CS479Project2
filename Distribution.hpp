@@ -15,7 +15,6 @@ using namespace arma;
 
 class Distribution
 {
-    //friend class Classifier;
     private:
         const std::string INPUT_DIRECTORY = "Input/";
         const std::string OUTPUT_DIRECTORY = "Output/";
@@ -25,7 +24,7 @@ class Distribution
         static size_t s_idGen;
 
         // Methods
-        void ImportData(std::string inputFileName, int dimensions);
+        void ImportMatrices(std::string inputFileName, int dimensions);
         double RandomNumberHelper();
         double BoxMuller(double m, double s);
 
@@ -36,8 +35,9 @@ class Distribution
         std::vector<std::vector<double>> m_data;
         
         // Constructors / Destructors
-        Distribution(size_t dimensions, Mat<double>, Mat<double>, std::string name = NULL);
-        Distribution(int dimensions, std::string inputFileName, std::string name = "");
+        Distribution(size_t dimensions, Mat<double>, Mat<double>, std::string name);
+        Distribution(int dimensions, std::string inputFileName, std::string name);
+        Distribution(int dimensions, std::string name);
         ~Distribution();
 
         // Methods
@@ -46,6 +46,9 @@ class Distribution
         size_t GetID();
         std::string GetName();
         std::string GetInfo();
+        void AddData(std::vector<double> data);
+        void ImportData(std::string inputFilePath);
+        void GetMatricesFromData();
 };
     
 #endif //DISTRIBUTION_H_

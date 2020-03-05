@@ -40,7 +40,7 @@ Distribution::Distribution(int dimensions, std::string inputFileName, std::strin
 {
 	try
 	{
-		ImportData(inputFileName, m_dimensions);
+		ImportMatrices(inputFileName, m_dimensions);
 	}
 	catch (const std::invalid_argument & e)
 	{
@@ -51,6 +51,16 @@ Distribution::Distribution(int dimensions, std::string inputFileName, std::strin
 		std::cerr << e.what() << '\n';
 		std::cerr << "This most likely means that the input file was not formatted correctly" << std::endl;
 	}
+}
+
+Distribution::Distribution(int dimensions, std::string name)
+	:m_id(s_idGen++),
+	m_name(name == "" ? std::to_string(m_id) : name),
+	m_dimensions(dimensions),
+	m_meanMatrix(dimensions, 1),
+	m_covarianceMatrix(dimensions, dimensions)
+{
+
 }
 
 /**
@@ -166,7 +176,7 @@ void Distribution::GenerateSamples(size_t num, std::string outputFileName)
  * @param inputFile the file to look for data in
  * @param dimensions the number of dimensions the data is supposed to have
  */ 
-void Distribution::ImportData(std::string inputFileName, int dimensions)
+void Distribution::ImportMatrices(std::string inputFileName, int dimensions)
 {
 	std::string fullPath = INPUT_DIRECTORY + inputFileName;
 	std::ifstream inputFile;
@@ -260,5 +270,37 @@ std::string Distribution::GetInfo()
 {
 	return (std::string)("\"" + m_name + "\" [id: " + std::to_string(m_id) + "]");
 }
+
+void Distribution::AddData(std::vector<double> data)
+{
+	m_data.push_back(data);
+}
+
+void Distribution::ImportData(std::string inputFilePath)
+{
+	std::ifstream input;
+	input.open(inputFilePath);
+
+	if (!input.is_open())
+	{
+		std::cerr << "Error opening input file: " << inputFilePath << std::endl;
+		exit(1);
+	}
+
+	while (!input.eof())
+	{
+		std::vector<double> buffer;
+		for (size_t i = 0; i < m_dimensions; i++)
+		{
+			std::string temp;
+			input >> temp;
+			buffer.push_back(std::stod(temp));
+		}
+		m_data.push_back(std::vector<double>(buffer));
+	}
+
+	input.close();
+}
+
 
 #endif //DISTRIBUTION_CPP_

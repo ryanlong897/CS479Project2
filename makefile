@@ -3,7 +3,7 @@ CC = g++
 
 all: main
 
-main: Distribution.cpp Classifier.cpp Main.cpp Image.cpp
+main: Distribution.cpp Classifier.cpp Image.cpp Main.cpp
 	$(CC) $(FLAGS) Distribution.cpp Classifier.cpp Image.cpp Main.cpp -o main
 
 clean: 

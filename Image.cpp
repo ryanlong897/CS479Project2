@@ -13,7 +13,7 @@ size_t Image::m_IDGen = 0;
 Image::Image()
     :m_width(0),
      m_height(0),
-     m_colorDepth(0),
+     m_colourDepth(0),
      m_ID(m_IDGen++),
      m_type(None),
      m_pixels(nullptr)
@@ -23,7 +23,7 @@ Image::Image()
 Image::Image(std::string fileName)
     :m_width(0),
      m_height(0),
-     m_colorDepth(0),
+     m_colourDepth(0),
      m_ID(m_IDGen++),
      m_type(None),
      m_pixels(nullptr)
@@ -34,7 +34,7 @@ Image::Image(std::string fileName)
 Image::Image(Image& other)
     :m_width(other.m_width),
      m_height(other.m_height),
-     m_colorDepth(other.m_colorDepth),
+     m_colourDepth(other.m_colourDepth),
      m_ID(m_IDGen++),
      m_type(other.m_type),
      m_pixels(new RGB*[other.m_height])
@@ -151,9 +151,9 @@ void Image::ReadImage(std::string fileName)
             {
                 m_height = std::atoi(split[i].c_str());
             }
-            else if (m_colorDepth == 0)
+            else if (m_colourDepth == 0)
             {
-                m_colorDepth = std::atoi(split[i].c_str());
+                m_colourDepth = std::atoi(split[i].c_str());
                 isHeaderComplete = true;
                 continue;
             }
@@ -164,7 +164,7 @@ void Image::ReadImage(std::string fileName)
         }
     } while (!isHeaderComplete);
 
-    ResizeImage(m_width, m_height, m_colorDepth);
+    ResizeImage(m_width, m_height, m_colourDepth);
 
     size_t size = m_height * m_width * (m_type == PPM ? 3 : 1);
     buffer = (unsigned char*) new unsigned char[size];
@@ -237,11 +237,11 @@ void Image::WriteImage(std::string fileName)
     }
 
     output << m_width << " " << m_height << std::endl;
-    output << m_colorDepth << std::endl;
+    output << m_colourDepth << std::endl;
 
     unsigned char* buffer;
     size_t size = m_height * m_width * (m_type == PPM ? 3 : 1);
-    std::cout << "going to write " << size << " bytes" << std::endl;
+
     buffer = (unsigned char*) new unsigned char[size];
 
     if (m_type == PPM)
@@ -286,7 +286,7 @@ void Image::PrintInfo()
 {
     std::cout << "Width:\t" << m_width << std::endl;
     std::cout << "Height:\t" << m_height << std::endl;
-    std::cout << "Depth:\t" << m_colorDepth << std::endl;
+    std::cout << "Depth:\t" << m_colourDepth << std::endl;
     std::cout << "Type:\t" << m_type << std::endl;
 }
 
@@ -299,5 +299,20 @@ void Image::ClearImageData()
     delete[] m_pixels;
 }
 
+void Image::NormalizeColour()
+{
+    for (size_t i = 0; i < m_height; i++)
+    {
+        for (size_t j = 0; j < m_width; j++)
+        {
+            RGB pixel = GetPixelValue(i, j);
+            int denominator = pixel.red + pixel.green + pixel.blue;
+            int r = (denominator != 0) ? pixel.red * m_colourDepth / denominator : 0;
+            int g = (denominator != 0) ? pixel.green * m_colourDepth / denominator : 0;
+            int b = (denominator != 0) ? pixel.blue * m_colourDepth / denominator : 0;
+            SetPixelValue(i, j, RGB(r, g, b));
+        }
+    }
+}
 
 #endif //IMAGE_CPP_

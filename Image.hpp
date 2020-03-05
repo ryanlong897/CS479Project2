@@ -61,7 +61,7 @@ class Image
     private:
         size_t m_width;
         size_t m_height;
-        size_t m_colorDepth;
+        size_t m_colourDepth;
         size_t m_ID;
 
         ImageType m_type;
@@ -85,6 +85,7 @@ class Image
         void WriteImage(std::string fileName);
         void PrintInfo();
         void ReadImage(std::string fileName);
+        void NormalizeColour();
 };
 
 #endif //IMAGE_HPP_
