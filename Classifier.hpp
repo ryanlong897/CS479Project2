@@ -19,7 +19,7 @@ class Classifier
         Classifier(std::vector<Distribution> classes, std::vector<double> priors = std::vector<double>() );
         ~Classifier();
         void ClassifyTwoClasses(std::string outputFile, int classificationMethod = 0);
-        void ClassifyImage(Image& image, std::string outputImageName, double threshold);
+        void ClassifyImage(Image& image, std::string outputImageName, double threshold, bool write = false);
         double CalculateBhattacharyyaBound();
 };
 

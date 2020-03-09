@@ -9,11 +9,11 @@
 // Greyscale images still use this class, but all of the colours are set to the same value
 struct RGB
 {
-    int red;
-    int green;
-    int blue;
+    double red;
+    double green;
+    double blue;
     RGB(){}
-    RGB(int r, int g, int b) 
+    RGB(double r, double g, double b) 
     { 
         red = r; 
         green = g; 
@@ -27,30 +27,8 @@ struct RGB
         return *this;
     }
     bool IsBlack() { return red == 0 && green == 0 && blue == 0; }
+    bool IsWhite() { return red == 255 && green == 255 && blue == 255; }
 };
-
-// Currently not used, may require a templateing of the image class
-struct YCbCr 
-{
-    int y;
-    int cr;
-    int cb;
-    YCbCr(){}
-    YCbCr(int y_, int cb_, int cr_) 
-    {
-        y = y_;
-        cb = cb_;
-        cr = cr_;
-    }
-
-    YCbCr& operator=(YCbCr& other)
-    {
-        y = other.y;
-        cb = other.cb;
-        cr = other.cr;
-        return *this;
-    }
-}; 
 
 // An enum for setting the specific type of image, should be able to handle input of all different types
 enum ImageType: int
@@ -94,6 +72,7 @@ class Image
         void WriteImage(std::string fileName);
         void PrintInfo();
         void NormalizeColour();
+        void ToYCbCr();
 };
 
 #endif //IMAGE_HPP_

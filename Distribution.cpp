@@ -394,7 +394,7 @@ double Distribution::GetCovariance(size_t var1, size_t var2)
 		covariance += (m_data[i][var1] - m_meanMatrix(var1)) * (m_data[i][var2] - m_meanMatrix(var2));
 	}
 
-	return covariance / m_data.size();
+	return var1 == var2 ? std::sqrt(covariance / m_data.size()) : covariance / m_data.size();
 }
 
 /**

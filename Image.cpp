@@ -58,7 +58,7 @@ Image::Image(Image& other)
         m_pixels[height] = new RGB[m_width];
         for (size_t width = 0; width < m_width; width++)
         {
-            SetPixelValue(height, width, GetPixelValue(height, width));
+            SetPixelValue(height, width, other.GetPixelValue(height, width));
         }
     }
 }
@@ -304,9 +304,9 @@ void Image::WriteImage(std::string fileName)
             for (size_t width = 0; width < (m_width * 3); width += 3)
             {
                 RGB data = GetPixelValue(height, width/3);
-                buffer[(height * m_width * 3) + width] = (unsigned char)data.red;
-                buffer[(height * m_width * 3) + width + 1] = (unsigned char)data.green;
-                buffer[(height * m_width * 3) + width + 2] = (unsigned char)data.blue;
+                buffer[(height * m_width * 3) + width] = data.red < 1 ? (unsigned char)(data.red * m_colourDepth) : (unsigned char)data.red;
+                buffer[(height * m_width * 3) + width + 1] = data.green < 1 ? (unsigned char)(data.green * m_colourDepth) : (unsigned char)data.green;
+                buffer[(height * m_width * 3) + width + 2] = data.blue < 1 ? (unsigned char)(data.blue * m_colourDepth) : (unsigned char)data.blue;
             }
         }
     }
@@ -373,12 +373,28 @@ void Image::NormalizeColour()
         {
             RGB pixel = GetPixelValue(i, j);
             int denominator = pixel.red + pixel.green + pixel.blue;
-            int r = (denominator != 0) ? pixel.red * m_colourDepth / denominator : 0;
-            int g = (denominator != 0) ? pixel.green * m_colourDepth / denominator : 0;
-            int b = (denominator != 0) ? pixel.blue * m_colourDepth / denominator : 0;
+            double r = (denominator != 0) ? pixel.red / denominator : 0;
+            double g = (denominator != 0) ? pixel.green / denominator : 0;
+            double b = (denominator != 0) ? pixel.blue / denominator : 0;
             SetPixelValue(i, j, RGB(r, g, b));
         }
     }
 }
+
+void Image::ToYCbCr()
+{
+    for (size_t i = 0; i < m_height; i++)
+    {
+        for (size_t j = 0; j < m_width; j++)
+        {
+            RGB pixel = GetPixelValue(i, j);
+            double r = .299 * pixel.red + .587 * pixel.green + .144 * pixel.blue;
+            double g = -.169 * pixel.red - .332 * pixel.green + .5 * pixel.blue;
+            double b = .5 * pixel.red - .419 * pixel.green -.081 * pixel.blue;
+            SetPixelValue(i, j, RGB(r, g, b));
+        }
+    }
+}
+
 
 #endif //IMAGE_CPP_

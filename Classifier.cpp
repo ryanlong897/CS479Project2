@@ -251,4 +251,28 @@ double Classifier::CalculateBhattacharyyaBound() {
 }
 
 
+void Classifier::ClassifyImage(Image& image, std::string outputImageName, double threshold, bool write)
+{
+    for (size_t i = 0; i < image.GetHeight(); i++)
+    {
+        for (size_t j = 0; j < image.GetWidth(); j++)
+        {
+            double red = image.GetPixelValue(i, j).red;
+            double green = image.GetPixelValue(i, j).green;
+            double blue = image.GetPixelValue(i, j).blue;
+
+            if (((green < (m_classes[0].m_meanMatrix(1) - threshold)) || (green > (m_classes[0].m_meanMatrix(1) + threshold))) 
+                || ((blue < (m_classes[0].m_meanMatrix(2) - threshold)) || (blue > (m_classes[0].m_meanMatrix(2) + threshold)))
+                )
+            {
+                image.SetPixelValue(i, j, RGB(255, 255, 255));
+            }
+        }
+    }
+    if (write)
+    {
+        image.WriteImage(outputImageName);
+    }
+}
+
 #endif // CLASSIFIER_CPP_
