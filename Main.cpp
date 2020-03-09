@@ -59,21 +59,23 @@ int main(int argc, char* argv[])
         std::remove (outputPath3.c_str());
         std::remove (outputPath4.c_str());
 
-        Image mask, trainingImage, testingImage1, testingImage2, originalImage3, originalImage6, trainingYCBCR;
+        Image mask, trainingImage, testingImage6, testingImage3, originalImage3, originalImage6, trainingYCBCR, testingImage3YCBCR, testingImage6YCBCR;
         mask.ReadImage("ref1.ppm");
-        
         trainingImage.ReadImage("Training_1.ppm");
         trainingYCBCR.ReadImage("Training_1.ppm");
-        trainingYCBCR.ToYCbCr();
-        testingImage1.ReadImage("Training_6.ppm");
-        testingImage2.ReadImage("Training_3.ppm");
-        trainingImage.NormalizeColour();
-        testingImage1.NormalizeColour();
-        testingImage2.NormalizeColour();
-
-        originalImage6.ReadImage("Training_6.ppm");
+        testingImage3.ReadImage("Training_3.ppm");
+        testingImage6.ReadImage("Training_6.ppm");
+        testingImage6YCBCR.ReadImage("Training_6.ppm");
+        testingImage3YCBCR.ReadImage("Training_3.ppm");
         originalImage3.ReadImage("Training_3.ppm");
-
+        originalImage6.ReadImage("Training_6.ppm");
+        
+        trainingYCBCR.ToYCbCr();
+        testingImage3YCBCR.ToYCbCr();
+        testingImage6YCBCR.ToYCbCr();
+        trainingImage.NormalizeColour();
+        testingImage3.NormalizeColour();
+        testingImage6.NormalizeColour();
 
         Distribution skin(3, "skinColour");
         Distribution skinYCBCR(3, "YCBCR");
@@ -90,56 +92,53 @@ int main(int argc, char* argv[])
         skin.PrintAll();
         skinYCBCR.PrintAll();
 
-        Image testingMask1("ref6.ppm");
-        Image testingMask2("ref3.ppm");
+        Image testingMask6("ref6.ppm");
+        Image testingMask3("ref3.ppm");
         Classifier imageClassifier(classes);
         Classifier imageClassifierYCBCR(classesYCBCR);
 
         std::cout << "classifying image 6 RGB" << std::endl;
         for (double i = .02; i < .08; i += .001)
         {
-            Image newImage(testingImage1);
-            imageClassifier.ClassifyImage(newImage, "Test1.ppm", i);
-            CountMisclassifications(testingMask1, newImage, outputPath1);
-
-            
+            Image newImage(testingImage6);
+            imageClassifier.ClassifyImage(newImage, "", i);
+            CountMisclassifications(testingMask6, newImage, outputPath1);  
         }
 
         std::cout << "classifying image 3 RGB" << std::endl;
         for (double i = .02; i < .08; i += .001)
         {
-            Image newImage(testingImage2);
-            imageClassifier.ClassifyImage(newImage, "Test2.ppm", i);
-            CountMisclassifications(testingMask2, newImage, outputPath2);
-        }
-
-        std::cout << "Classifying image 3 YCBCR" << std::endl;
-        for (int i = 0; i < 255; i++)
-        {
-            Image newImage2(testingImage1);
-            newImage2.ToYCbCr();
-            imageClassifierYCBCR.ClassifyImage(newImage2, "Test1.ppm", i);
-            CountMisclassifications(testingMask1, newImage2, outputPath3);
+            Image newImage(testingImage3);
+            imageClassifier.ClassifyImage(newImage, "", i);
+            CountMisclassifications(testingMask3, newImage, outputPath2);
         }
 
         std::cout << "Classifying image 6 YCBCR" << std::endl;
         for (int i = 0; i < 255; i++)
         {
-            Image newImage2(testingImage2);
-            newImage2.ToYCbCr();
-            imageClassifierYCBCR.ClassifyImage(newImage2, "Test2.ppm", i);
-            CountMisclassifications(testingMask2, newImage2, outputPath4);
+            Image newImage2(testingImage6YCBCR);
+            imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
+            CountMisclassifications(testingMask6, newImage2, outputPath3);
         }
 
-        Image newImage2(testingImage2);
+        std::cout << "Classifying image 3 YCBCR" << std::endl;
+        for (int i = 0; i < 255; i++)
+        {
+            Image newImage2(testingImage3YCBCR);
+            imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
+            CountMisclassifications(testingMask3, newImage2, outputPath4);
+        }
+
+        Image newImage(testingImage6);
+        imageClassifier.ClassifyImage(newImage, "whatever", .045);
+        Mask(newImage, originalImage6);
+        originalImage6.WriteImage("MaskedImage6.ppm");
+
+        Image newImage2(testingImage3);
         imageClassifier.ClassifyImage(newImage2, "whatever", .045);
         Mask(newImage2, originalImage3);
         originalImage3.WriteImage("MaskedImage3.ppm");
 
-        Image newImage(testingImage1);
-        imageClassifier.ClassifyImage(newImage, "whatever", .045);
-        Mask(newImage, originalImage6);
-        originalImage6.WriteImage("MaskedImage6.ppm");
 
     }
 
