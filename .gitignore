@@ -33,7 +33,7 @@
 main
 
 #output text
-Output/*.txt
+Output/*
 
 .DS_store
 
