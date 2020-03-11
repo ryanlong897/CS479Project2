@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
         originalImage3.WriteImage("MaskedImage3.ppm");
         
         Image newImage3(testingImage3YCBCR);
-        imageClassifier.ClassifyImage(newImage3, "whatever", 255);
+        imageClassifier.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
         newImage3.ToRGB();
         //Mask(newImage2, originalImage3);
         newImage3.WriteImage("YCBCRimage3.ppm");

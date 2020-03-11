@@ -388,9 +388,9 @@ void Image::ToYCbCr()
         for (size_t j = 0; j < m_width; j++)
         {
             RGB pixel = GetPixelValue(i, j);
-            double r = .257 * pixel.red + .504 * pixel.green + .098 * pixel.blue + 16;
-            double g = -.148 * pixel.red - .291 * pixel.green + 0.439 * pixel.blue + 128;
-            double b = 0.439 * pixel.red - .369 * pixel.green - .071 * pixel.blue + 128;
+            double r = (.257 * pixel.red + .504 * pixel.green + .098 * pixel.blue) + 16;
+            double g = (-.148 * pixel.red - .291 * pixel.green + 0.439 * pixel.blue) + 128;
+            double b = (0.439 * pixel.red - .369 * pixel.green - .071 * pixel.blue) + 128;
             SetPixelValue(i, j, RGB(r, g, b, true));
 
         }
