@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
         Classifier imageClassifierYCBCR(classesYCBCR);
 
         std::cout << "classifying image 6 RGB" << std::endl;
-        for (double i = .02; i < .08; i += .001)
+        for (double i = 0.0; i < .4; i += .001)
         {
             Image newImage(testingImage6);
             imageClassifier.ClassifyImage(newImage, "", i);
@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
         }
 
         std::cout << "classifying image 3 RGB" << std::endl;
-        for (double i = .02; i < .08; i += .001)
+        for (double i = 0.0; i < .4; i += .001)
         {
             Image newImage(testingImage3);
             imageClassifier.ClassifyImage(newImage, "", i);
@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
         }
 
         std::cout << "Classifying image 6 YCBCR" << std::endl;
-        for (int i = 0; i < 255; i++)
+        for (double i = 0.0; i < .4; i += .001)
         {
             Image newImage2(testingImage6YCBCR);
             imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
@@ -122,7 +122,7 @@ int main(int argc, char* argv[])
         }
 
         std::cout << "Classifying image 3 YCBCR" << std::endl;
-        for (int i = 0; i < 255; i++)
+        for (double i = 0.0; i < .4; i+= .001)
         {
             Image newImage2(testingImage3YCBCR);
             imageClassifierYCBCR.ClassifyImage(newImage2, "", i);

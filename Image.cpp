@@ -388,10 +388,11 @@ void Image::ToYCbCr()
         for (size_t j = 0; j < m_width; j++)
         {
             RGB pixel = GetPixelValue(i, j);
-            double r = .299 * pixel.red + .587 * pixel.green + .144 * pixel.blue;
-            double g = -.169 * pixel.red - .332 * pixel.green + .5 * pixel.blue;
-            double b = .5 * pixel.red - .419 * pixel.green -.081 * pixel.blue;
-            SetPixelValue(i, j, RGB(r, g, b));
+            double r = (.299 * pixel.red + .587 * pixel.green + .144 * pixel.blue) / m_colourDepth;
+            double g = (-.169 * pixel.red - .332 * pixel.green + .5 * pixel.blue) / m_colourDepth;
+            double b = (.5 * pixel.red - .419 * pixel.green -.081 * pixel.blue) / m_colourDepth;
+            SetPixelValue(i, j, RGB(r, g, b, true));
+
         }
     }
 }

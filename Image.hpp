@@ -12,12 +12,14 @@ struct RGB
     double red;
     double green;
     double blue;
+    bool isYCbCr = false;
     RGB(){}
-    RGB(double r, double g, double b) 
+    RGB(double r, double g, double b, bool YCbCr = false) 
     { 
         red = r; 
         green = g; 
-        blue = b; 
+        blue = b;
+        isYCbCr = YCbCr;
     }
     RGB& operator= (RGB& other) 
     { 
