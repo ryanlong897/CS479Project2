@@ -14,7 +14,7 @@ struct RGB
     double blue;
     bool isYCbCr = false;
     RGB(){}
-    RGB(double r, double g, double b, bool YCbCr = false) 
+    RGB(double r, double g, double b, bool YCbCr) 
     { 
         red = r; 
         green = g; 
@@ -26,10 +26,18 @@ struct RGB
         red = other.red; 
         green = other.green; 
         blue = other.blue;
+        isYCbCr = other.isYCbCr;
         return *this;
     }
     bool IsBlack() { return red == 0 && green == 0 && blue == 0; }
-    bool IsWhite() { return red == 255 && green == 255 && blue == 255; }
+    bool IsWhite() 
+    { 
+        if (isYCbCr)
+        {
+            return red == 255 && green == 255 && blue == 255; 
+        }
+        else return red == 235 && green == 128 && blue == 128;
+    }
 };
 
 // An enum for setting the specific type of image, should be able to handle input of all different types
@@ -75,6 +83,7 @@ class Image
         void PrintInfo();
         void NormalizeColour();
         void ToYCbCr();
+        void ToRGB();
 };
 
 #endif //IMAGE_HPP_

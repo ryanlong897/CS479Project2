@@ -235,7 +235,7 @@ void Image::ReadImage(std::string fileName)
                 g = (int)buffer[height * m_width * 3 + width + 1];
                 b = (int)buffer[height * m_width * 3 + width + 2];
 
-                SetPixelValue(height, width/3, RGB(r, g, b));
+                SetPixelValue(height, width/3, RGB(r, g, b, false));
             }
         }
     }
@@ -248,7 +248,7 @@ void Image::ReadImage(std::string fileName)
             {
                 c = (int)buffer[height * m_width + width];
 
-                SetPixelValue(height, width, RGB(c, c, c));
+                SetPixelValue(height, width, RGB(c, c, c, false));
             }
         }
     }
@@ -304,9 +304,9 @@ void Image::WriteImage(std::string fileName)
             for (size_t width = 0; width < (m_width * 3); width += 3)
             {
                 RGB data = GetPixelValue(height, width/3);
-                buffer[(height * m_width * 3) + width] = data.red < 1 ? (unsigned char)(data.red * m_colourDepth) : (unsigned char)data.red;
-                buffer[(height * m_width * 3) + width + 1] = data.green < 1 ? (unsigned char)(data.green * m_colourDepth) : (unsigned char)data.green;
-                buffer[(height * m_width * 3) + width + 2] = data.blue < 1 ? (unsigned char)(data.blue * m_colourDepth) : (unsigned char)data.blue;
+                buffer[(height * m_width * 3) + width] = data.red < 1 ? (unsigned char)((int)data.red * m_colourDepth) : (unsigned char)(int)data.red;
+                buffer[(height * m_width * 3) + width + 1] = data.green < 1 ? (unsigned char)((int)data.green * m_colourDepth) : (unsigned char)(int)data.green;
+                buffer[(height * m_width * 3) + width + 2] = data.blue < 1 ? (unsigned char)((int)data.blue * m_colourDepth) : (unsigned char)(int)data.blue;
             }
         }
     }
@@ -376,7 +376,7 @@ void Image::NormalizeColour()
             double r = (denominator != 0) ? pixel.red / denominator : 0;
             double g = (denominator != 0) ? pixel.green / denominator : 0;
             double b = (denominator != 0) ? pixel.blue / denominator : 0;
-            SetPixelValue(i, j, RGB(r, g, b));
+            SetPixelValue(i, j, RGB(r, g, b, false));
         }
     }
 }
@@ -388,14 +388,61 @@ void Image::ToYCbCr()
         for (size_t j = 0; j < m_width; j++)
         {
             RGB pixel = GetPixelValue(i, j);
-            double r = (.299 * pixel.red + .587 * pixel.green + .144 * pixel.blue) / m_colourDepth;
-            double g = (-.169 * pixel.red - .332 * pixel.green + .5 * pixel.blue) / m_colourDepth;
-            double b = (.5 * pixel.red - .419 * pixel.green -.081 * pixel.blue) / m_colourDepth;
+            double r = .257 * pixel.red + .504 * pixel.green + .098 * pixel.blue + 16;
+            double g = -.148 * pixel.red - .291 * pixel.green + 0.439 * pixel.blue + 128;
+            double b = 0.439 * pixel.red - .369 * pixel.green - .071 * pixel.blue + 128;
             SetPixelValue(i, j, RGB(r, g, b, true));
 
         }
     }
 }
 
+// void Image::ToYCbCr()
+// {
+//     for (size_t i = 0; i < m_height; i++)
+//     {
+//         for (size_t j = 0; j < m_width; j++)
+//         {
+//             RGB pixel = GetPixelValue(i, j);
+//             double r = (((.299 * pixel.red) + (.587 * pixel.green) + (.144 * pixel.blue)) / m_colourDepth * 219) + 16;
+//             double g = (((-.168736 * pixel.red) + (-.331264 * pixel.green) + (.5 * pixel.blue)) / m_colourDepth * 224) + 128;
+//             double b = (((.5 * pixel.red) + (-0.418688 * pixel.green) + (-0.081312 * pixel.blue)) / m_colourDepth * 224) + 128;
+//             SetPixelValue(i, j, RGB(r, g, b, true));
+
+//         }
+//     }
+// }
+
+// void Image::ToRGB()
+// {
+//     for (size_t i = 0; i < m_height; i++)
+//     {
+//         for (size_t j = 0; j < m_width; j++)
+//         {
+//             RGB pixel = GetPixelValue(i, j);
+//             double r = m_colourDepth * (((pixel.red - 16) / 219) + 1.402 * ((pixel.blue - 128) / 224));
+//             double g = m_colourDepth * (((pixel.red - 16) / 219) - (.344136 * ((pixel.green - 128) / 224)) - (.71436 * ((pixel.blue - 128) / 224)));
+//             double b = m_colourDepth * (((pixel.red - 16) / 219) + 1.772 * ((pixel.green - 128) / 224));
+//             SetPixelValue(i, j, RGB(r, g, b, false));
+
+//         }
+//     }
+// }
+
+void Image::ToRGB()
+{
+    for (size_t i = 0; i < m_height; i++)
+    {
+        for (size_t j = 0; j < m_width; j++)
+        {
+            RGB pixel = GetPixelValue(i, j);
+            double r = 1.164 * (pixel.red - 16) + 1.59 * (pixel.blue - 128);
+            double g = 1.164 * (pixel.red - 16) - .813 * (pixel.blue - 128) - .392 * (pixel.green - 128);
+            double b = 1.164 * (pixel.red - 16) + 2.017 * (pixel.green - 128);
+            SetPixelValue(i, j, RGB(r, g, b, false));
+
+        }
+    }
+}
 
 #endif //IMAGE_CPP_

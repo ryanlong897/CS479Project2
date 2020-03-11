@@ -262,12 +262,13 @@ void Classifier::ClassifyImage(Image& image, std::string outputImageName, double
             double green = pixel.green;
             double blue = pixel.blue;
 
-            if ((!pixel.isYCbCr && ((red < (m_classes[0].m_meanMatrix(0) - threshold)) || (red > (m_classes[0].m_meanMatrix(0) + threshold))))
+            if (
+                (!pixel.isYCbCr && ((red < (m_classes[0].m_meanMatrix(0) - threshold)) || (red > (m_classes[0].m_meanMatrix(0) + threshold)))) 
                 || ((green < (m_classes[0].m_meanMatrix(1) - threshold)) || (green > (m_classes[0].m_meanMatrix(1) + threshold))) 
                 || ((blue < (m_classes[0].m_meanMatrix(2) - threshold)) || (blue > (m_classes[0].m_meanMatrix(2) + threshold)))
                 )
             {
-                image.SetPixelValue(i, j, RGB(255, 255, 255));
+                image.SetPixelValue(i, j, pixel.isYCbCr ? RGB(235, 128, 128, true) : RGB(255, 255, 255, false));
             }
         }
     }
@@ -275,7 +276,7 @@ void Classifier::ClassifyImage(Image& image, std::string outputImageName, double
     {
         image.WriteImage(outputImageName);
     }
-    else if (outputImageName == "")
+    else if (write && outputImageName == "")
     {
         std::cerr << "error, invalid name\n";
     }
