@@ -97,37 +97,37 @@ int main(int argc, char* argv[])
         Classifier imageClassifier(classes);
         Classifier imageClassifierYCBCR(classesYCBCR);
 
-        // std::cout << "classifying image 6 RGB" << std::endl;
-        // for (double i = 0.0; i < .4; i += .001)
-        // {
-        //     Image newImage(testingImage6);
-        //     imageClassifier.ClassifyImage(newImage, "", i);
-        //     CountMisclassifications(testingMask6, newImage, outputPath1);  
-        // }
+        std::cout << "classifying image 6 RGB" << std::endl;
+        for (double i = 0.0; i < .4; i += .001)
+        {
+            Image newImage(testingImage6);
+            imageClassifier.ClassifyImage(newImage, "", i);
+            CountMisclassifications(testingMask6, newImage, outputPath1);  
+        }
 
-        // std::cout << "classifying image 3 RGB" << std::endl;
-        // for (double i = 0.0; i < .4; i += .001)
-        // {
-        //     Image newImage(testingImage3);
-        //     imageClassifier.ClassifyImage(newImage, "", i);
-        //     CountMisclassifications(testingMask3, newImage, outputPath2);
-        // }
+        std::cout << "classifying image 3 RGB" << std::endl;
+        for (double i = 0.0; i < .4; i += .001)
+        {
+            Image newImage(testingImage3);
+            imageClassifier.ClassifyImage(newImage, "", i);
+            CountMisclassifications(testingMask3, newImage, outputPath2);
+        }
 
-        // std::cout << "Classifying image 6 YCBCR" << std::endl;
-        // for (double i = 0; i < 100; i += 1)
-        // {
-        //     Image newImage2(testingImage6YCBCR);
-        //     imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
-        //     CountMisclassifications(testingMask6, newImage2, outputPath3);
-        // }
+        std::cout << "Classifying image 6 YCBCR" << std::endl;
+        for (double i = 0; i < 100; i += 1)
+        {
+            Image newImage2(testingImage6YCBCR);
+            imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
+            CountMisclassifications(testingMask6, newImage2, outputPath3);
+        }
 
-        // std::cout << "Classifying image 3 YCBCR" << std::endl;
-        // for (double i = 0; i < 100; i+= 1)
-        // {
-        //     Image newImage2(testingImage3YCBCR);
-        //     imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
-        //     CountMisclassifications(testingMask3, newImage2, outputPath4);
-        // }
+        std::cout << "Classifying image 3 YCBCR" << std::endl;
+        for (double i = 0; i < 100; i+= 1)
+        {
+            Image newImage2(testingImage3YCBCR);
+            imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
+            CountMisclassifications(testingMask3, newImage2, outputPath4);
+        }
 
         Image newImage(testingImage6);
         imageClassifier.ClassifyImage(newImage, "whatever", .045);
@@ -138,11 +138,10 @@ int main(int argc, char* argv[])
         imageClassifier.ClassifyImage(newImage2, "whatever", .045);
         Mask(newImage2, originalImage3);
         originalImage3.WriteImage("MaskedImage3.ppm");
-        
+    
         Image newImage3(testingImage3YCBCR);
-        imageClassifier.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
+        imageClassifierYCBCR.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
         newImage3.ToRGB();
-        //Mask(newImage2, originalImage3);
         newImage3.WriteImage("YCBCRimage3.ppm");
     }
 
@@ -184,8 +183,8 @@ void GetMaskedImagePixelData(Image& mask, Image& image, Distribution& dist)
                 RGB imagePixel = image.GetPixelValue(i, j);
                 std::vector<double> values;
                 values.push_back((double)imagePixel.red);
-                values.push_back((double)imagePixel.blue);
                 values.push_back((double)imagePixel.green);
+                values.push_back((double)imagePixel.blue);
 
                 dist.AddData(std::vector<double>(values));
             }
@@ -212,7 +211,8 @@ void CountMisclassifications(Image &mask, Image& image, std::string outputTextFi
             {
                 falsePositive++;
             }
-            else if(!maskPixel.IsBlack() && imagePixel.IsWhite()){
+            else if(!maskPixel.IsBlack() && imagePixel.IsWhite())
+            {
                 falseNegative++;
             }
         }

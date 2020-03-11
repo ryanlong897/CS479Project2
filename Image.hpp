@@ -29,14 +29,21 @@ struct RGB
         isYCbCr = other.isYCbCr;
         return *this;
     }
-    bool IsBlack() { return red == 0 && green == 0 && blue == 0; }
+    bool IsBlack() 
+    { 
+        if (isYCbCr)
+        {
+            return red <= 16 && green == 128 && blue == 128;
+        }
+        else return red == 0 && green == 0 && blue == 0; 
+    }
     bool IsWhite() 
     { 
         if (isYCbCr)
         {
-            return red == 255 && green == 255 && blue == 255; 
+            return red == 235 && green == 128 && blue == 128;
         }
-        else return red == 235 && green == 128 && blue == 128;
+        else return red == 255 && green == 255 && blue == 255; 
     }
 };
 
