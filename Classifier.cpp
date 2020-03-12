@@ -251,6 +251,15 @@ double Classifier::CalculateBhattacharyyaBound() {
 }
 
 
+/**
+ * 
+ * 
+ * BEGIN PROJECT 2
+ * 
+ * 
+ * 
+ */ 
+
 void Classifier::ClassifyImage(Image& image, std::string outputImageName, double threshold, bool write)
 {
     for (size_t i = 0; i < image.GetHeight(); i++)

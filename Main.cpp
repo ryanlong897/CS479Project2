@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
+#include <set>
 #include "Distribution.hpp"
 #include "Classifier.hpp"
 #include "Image.hpp"
@@ -8,6 +9,7 @@
 
 void GetMaskedImagePixelData(Image& mask, Image& image, Distribution& dist);
 void CountMisclassifications(Image &mask, Image& image, std::string outputTextFile);
+void ROCCurve(Image& image, Classifier classifier, Image& mask, std::string outputPath, bool decimalThresholds);
 void Mask(Image& mask, Image& other);
 
 int main(int argc, char* argv[])
@@ -97,7 +99,14 @@ int main(int argc, char* argv[])
         Classifier imageClassifier(classes);
         Classifier imageClassifierYCBCR(classesYCBCR);
 
+
+
         std::cout << "classifying image 6 RGB" << std::endl;
+        std::thread image6(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
+        std::thread image3(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
+        std::thread image6ycbcr(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
+        std::thread image3ycbcr(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
+
         for (double i = 0.0; i < .4; i += .001)
         {
             Image newImage(testingImage6);
@@ -139,20 +148,34 @@ int main(int argc, char* argv[])
         Mask(newImage2, originalImage3);
         originalImage3.WriteImage("MaskedImage3.ppm");
     
-        Image newImage3(testingImage3YCBCR);
-        imageClassifierYCBCR.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
-        newImage3.ToRGB();
-        newImage3.WriteImage("YCBCRimage3.ppm");
+        // Image newImage3(testingImage3YCBCR);
+        // imageClassifierYCBCR.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
+        // newImage3.ToRGB();
+        // newImage3.WriteImage("YCBCRimage3.ppm");
     }
 
-    if (part == 3)
-    {
-        Image test("Training_1.ppm");
-        test.ToYCbCr();
-        test.ToRGB();
-        test.WriteImage("test.ppm");
-    }
     return 0;
+}
+
+void ROCCurve(Image& image, Classifier classifier, Image& mask, std::string outputPath, bool decimalThresholds)
+{
+    double delta, double max;
+    if (decimalThresholds)
+    {
+        delta = .001;
+        max = .4;
+    }
+    else
+    {
+        delta = 1;
+        max = 100;
+    }
+    for (double i = 0; i < max; i += delta)
+    {
+        Image newImage(image);
+        imageClassifierYCBCR.ClassifyImage(newImage, "", i);
+        CountMisclassifications(mask, newImage, outputPath);
+    }
 }
 
 /**

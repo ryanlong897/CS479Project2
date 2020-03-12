@@ -287,6 +287,17 @@ std::string Distribution::GetInfo()
 }
 
 /**
+ * 
+ * 
+ * BEGIN PROJECT 2
+ * 
+ * 
+ * 
+ */ 
+
+
+
+/**
  * Add data 
  * @param data a vector with dimensions m_dimensions
  * 
