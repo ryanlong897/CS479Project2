@@ -1,17 +1,22 @@
 #include <iostream>
 #include <fstream>
 #include <thread>
-#include <set>
 #include "Distribution.hpp"
 #include "Classifier.hpp"
 #include "Image.hpp"
 
+//If you get compilation errors when multithreading stuff is trying to happen, set this to 0
+#define multiThread 1
 
 void GetMaskedImagePixelData(Image& mask, Image& image, Distribution& dist);
 void CountMisclassifications(Image &mask, Image& image, std::string outputTextFile);
-void ROCCurve(Image& image, Classifier classifier, Image& mask, std::string outputPath, bool decimalThresholds);
+void ROCCurve(Image& image, Classifier& classifier, Image& mask, std::string outputPath, bool decimalThresholds);
 void Mask(Image& mask, Image& other);
 
+/**
+ * Main
+ * @brief performs the tasks required for project 2
+ */ 
 int main(int argc, char* argv[])
 {   
     int part = 0;
@@ -25,26 +30,78 @@ int main(int argc, char* argv[])
      */
     if (part == 1 || part == 0)
     {
-        Distribution dist0(2, "modified dist 1");
-        Distribution dist1(2, "modified dist 2");
+        std::vector<Distribution> part1Distributions;
+        std::vector<Distribution> part2Distributions;
 
-        dist0.ImportData(INPUT_DIRECTORY + "part2_dist0.txt");
-        dist1.ImportData(INPUT_DIRECTORY + "part2_dist1.txt");
+        Distribution part1a_dist1(2, "Part1, Dist 1");
+        Distribution part1a_dist2(2, "Part1, Dist 2");
+        Distribution part2a_dist1(2, "Part2, Dist 1");
+        Distribution part2a_dist2(2, "Part2, Dist 2");
 
-        dist0.GetMatricesFromData();
-        dist1.GetMatricesFromData();
+        part1a_dist1.ImportData(INPUT_DIRECTORY + "part1_dist0.txt");
+        part1a_dist2.ImportData(INPUT_DIRECTORY + "part1_dist1.txt");
+        part2a_dist1.ImportData(INPUT_DIRECTORY + "part2_dist0.txt");
+        part2a_dist2.ImportData(INPUT_DIRECTORY + "part2_dist1.txt");
 
-        dist0.PrintAll();
-        dist1.PrintAll();
+        do
+        {
 
-        std::vector<Distribution> distributions;
-        distributions.push_back(dist0);
-        distributions.push_back(dist1);
+            part1a_dist1.GetMatricesFromData();
+            part1a_dist2.GetMatricesFromData();
+            part2a_dist1.GetMatricesFromData();
+            part2a_dist2.GetMatricesFromData();
 
-        Classifier classifier(distributions);
-        classifier.ClassifyTwoClasses("ClassificationResults.txt");
-        classifier.CalculateDecisionBoundary();
-        classifier.CalculateBhattacharyyaBound();
+            part1a_dist1.PrintAll();
+            part1a_dist2.PrintAll();
+            part2a_dist1.PrintAll();
+            part2a_dist2.PrintAll();
+
+            part1Distributions.clear();
+            part2Distributions.clear();
+
+            part1Distributions.push_back(part1a_dist1);
+            part1Distributions.push_back(part1a_dist2);
+            part2Distributions.push_back(part2a_dist1);
+            part2Distributions.push_back(part2a_dist2);
+
+            Classifier part1Classifier(part1Distributions);
+            Classifier part2Classifier(part2Distributions);
+
+#if multiThread
+            std::thread classify1(&Classifier::ClassifyTwoClasses, (Classifier*)(&part1Classifier), "Part1a.txt", 0);
+            std::thread classify2(&Classifier::ClassifyTwoClasses, (Classifier*)(&part2Classifier), "Part2a.txt", 0);
+
+            classify1.join();
+            classify2.join();
+
+            std::thread classify3(&Classifier::CalculateDecisionBoundary, &part1Classifier);
+            std::thread classify4(&Classifier::CalculateDecisionBoundary, &part2Classifier);
+
+            classify3.join();
+            classify4.join();
+            
+            std::thread classify5(&Classifier::CalculateBhattacharyyaBound, &part1Classifier);
+            std::thread classify6(&Classifier::CalculateBhattacharyyaBound, &part2Classifier);
+
+            classify5.join();
+            classify6.join();
+#else
+            part1Classifier.ClassifyTwoClasses("Part1a.txt");
+            part2Classifier.ClassifyTwoClasses("Part2a.txt");
+            part1Classifier.CalculateDecisionBoundary();
+            part2Classifier.CalculateDecisionBoundary();
+            part1Classifier.CalculateBhattacharyyaBound();
+            part2Classifier.CalculateBhattacharyyaBound();
+#endif
+            part1a_dist1.SetDataSize(part1a_dist1.m_data.size() / 10);
+            part1a_dist2.SetDataSize(part1a_dist2.m_data.size() / 10);
+            part2a_dist1.SetDataSize(part2a_dist1.m_data.size() / 10);
+            part2a_dist2.SetDataSize(part2a_dist2.m_data.size() / 10);
+
+            std::cout << "-------------------------------------------------------\n" << std::endl;
+
+        } while (part1a_dist1.m_data.size() >= 10);
+
     }
 
     /**
@@ -100,13 +157,21 @@ int main(int argc, char* argv[])
         Classifier imageClassifierYCBCR(classesYCBCR);
 
 
-
+#if multiThread
         std::cout << "classifying image 6 RGB" << std::endl;
-        std::thread image6(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
-        std::thread image3(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
-        std::thread image6ycbcr(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
-        std::thread image3ycbcr(ROCCurve, testingImage6, imageClassifier, testingMask6, outputPath1, true);
+        std::thread image6(ROCCurve, std::ref(testingImage6), std::ref(imageClassifier), std::ref(testingMask6), outputPath1, true);
+        std::cout << "classifying image 3 RGB" << std::endl;
+        std::thread image3(ROCCurve, std::ref(testingImage3), std::ref(imageClassifier), std::ref(testingMask3), outputPath2, true);
+        std::cout << "classifying image 6 YCBCR" << std::endl;
+        std::thread image6ycbcr(ROCCurve, std::ref(testingImage6YCBCR), std::ref(imageClassifierYCBCR), std::ref(testingMask6), outputPath3, false);
+        std::cout << "classifying image 3 YCBCR" << std::endl;
+        std::thread image3ycbcr(ROCCurve, std::ref(testingImage3YCBCR), std::ref(imageClassifierYCBCR), std::ref(testingMask3), outputPath4, false);
 
+        image6.join();
+        image3.join();
+        image6ycbcr.join();
+        image3ycbcr.join();
+#else
         for (double i = 0.0; i < .4; i += .001)
         {
             Image newImage(testingImage6);
@@ -137,6 +202,7 @@ int main(int argc, char* argv[])
             imageClassifierYCBCR.ClassifyImage(newImage2, "", i);
             CountMisclassifications(testingMask3, newImage2, outputPath4);
         }
+#endif
 
         Image newImage(testingImage6);
         imageClassifier.ClassifyImage(newImage, "whatever", .045);
@@ -147,19 +213,14 @@ int main(int argc, char* argv[])
         imageClassifier.ClassifyImage(newImage2, "whatever", .045);
         Mask(newImage2, originalImage3);
         originalImage3.WriteImage("MaskedImage3.ppm");
-    
-        // Image newImage3(testingImage3YCBCR);
-        // imageClassifierYCBCR.ClassifyImage(newImage3, "whatever", std::stod(argv[2]));
-        // newImage3.ToRGB();
-        // newImage3.WriteImage("YCBCRimage3.ppm");
     }
 
     return 0;
 }
 
-void ROCCurve(Image& image, Classifier classifier, Image& mask, std::string outputPath, bool decimalThresholds)
+void ROCCurve(Image& image, Classifier& classifier, Image& mask, std::string outputPath, bool decimalThresholds)
 {
-    double delta, double max;
+    double delta, max;
     if (decimalThresholds)
     {
         delta = .001;
@@ -167,13 +228,13 @@ void ROCCurve(Image& image, Classifier classifier, Image& mask, std::string outp
     }
     else
     {
-        delta = 1;
-        max = 100;
+        delta = .2;
+        max = 50;
     }
     for (double i = 0; i < max; i += delta)
     {
         Image newImage(image);
-        imageClassifierYCBCR.ClassifyImage(newImage, "", i);
+        classifier.ClassifyImage(newImage, "", i);
         CountMisclassifications(mask, newImage, outputPath);
     }
 }
@@ -215,6 +276,9 @@ void GetMaskedImagePixelData(Image& mask, Image& image, Distribution& dist)
     }
 }
 
+/**
+ * 
+ */ 
 void CountMisclassifications(Image &mask, Image& image, std::string outputTextFile)
 {
     int falsePositive = 0, falseNegative = 0;
@@ -247,6 +311,9 @@ void CountMisclassifications(Image &mask, Image& image, std::string outputTextFi
     output.close();
 }
 
+/**
+ * 
+ */ 
 void Mask(Image& mask, Image& other)
 {
     if (mask.GetHeight() != other.GetHeight() || mask.GetWidth() != other.GetWidth())

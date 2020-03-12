@@ -1,4 +1,4 @@
-FLAGS = -std=c++11 -Wall -larmadillo -O3
+FLAGS = -std=c++11 -pthread -lpthread -Wall -Wl,--no-as-needed -larmadillo -O3 
 CC = g++
 
 all: main

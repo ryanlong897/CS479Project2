@@ -333,7 +333,6 @@ void Image::WriteImage(std::string fileName)
     output.close();
 
     delete[] buffer;
-
 }
 
 /**
@@ -381,6 +380,10 @@ void Image::NormalizeColour()
     }
 }
 
+/**
+ * To YCbCr
+ * @brief converts the image pixels to YCbCr format
+ */ 
 void Image::ToYCbCr()
 {
     for (size_t i = 0; i < m_height; i++)
@@ -397,38 +400,10 @@ void Image::ToYCbCr()
     }
 }
 
-// void Image::ToYCbCr()
-// {
-//     for (size_t i = 0; i < m_height; i++)
-//     {
-//         for (size_t j = 0; j < m_width; j++)
-//         {
-//             RGB pixel = GetPixelValue(i, j);
-//             double r = (((.299 * pixel.red) + (.587 * pixel.green) + (.144 * pixel.blue)) / m_colourDepth * 219) + 16;
-//             double g = (((-.168736 * pixel.red) + (-.331264 * pixel.green) + (.5 * pixel.blue)) / m_colourDepth * 224) + 128;
-//             double b = (((.5 * pixel.red) + (-0.418688 * pixel.green) + (-0.081312 * pixel.blue)) / m_colourDepth * 224) + 128;
-//             SetPixelValue(i, j, RGB(r, g, b, true));
-
-//         }
-//     }
-// }
-
-// void Image::ToRGB()
-// {
-//     for (size_t i = 0; i < m_height; i++)
-//     {
-//         for (size_t j = 0; j < m_width; j++)
-//         {
-//             RGB pixel = GetPixelValue(i, j);
-//             double r = m_colourDepth * (((pixel.red - 16) / 219) + 1.402 * ((pixel.blue - 128) / 224));
-//             double g = m_colourDepth * (((pixel.red - 16) / 219) - (.344136 * ((pixel.green - 128) / 224)) - (.71436 * ((pixel.blue - 128) / 224)));
-//             double b = m_colourDepth * (((pixel.red - 16) / 219) + 1.772 * ((pixel.green - 128) / 224));
-//             SetPixelValue(i, j, RGB(r, g, b, false));
-
-//         }
-//     }
-// }
-
+/**
+ * To RGB
+ * @brief converts the image pixels to RGB format from ycbcr
+ */ 
 void Image::ToRGB()
 {
     for (size_t i = 0; i < m_height; i++)

@@ -244,7 +244,7 @@ double Classifier::CalculateBhattacharyyaBound() {
     
     p_error = (pow((m_priors[0] * m_priors[1]), .5) * exp(-k));
     
-    std::cout << "Bhattacharyya Error: " << "P(error) <= " << p_error << endl;
+    std::cout << "Bhattacharyya Error: " << "P(error) <= " << p_error << std::endl << std::endl;
     
     
     return p_error;
@@ -260,6 +260,15 @@ double Classifier::CalculateBhattacharyyaBound() {
  * 
  */ 
 
+/**
+ * Classify image
+ * @param image the image to be classified
+ * @param outputImageName the name that the classified image should be output to
+ * @param threshold the threshold that should be used to classify the image
+ * @param write whether or not to write the classified image to a file or not
+ * 
+ * @brief for every pixel in the image, will determine if that pixel is representative of the classifiers average colour (within a given threshold)
+ */ 
 void Classifier::ClassifyImage(Image& image, std::string outputImageName, double threshold, bool write)
 {
     for (size_t i = 0; i < image.GetHeight(); i++)

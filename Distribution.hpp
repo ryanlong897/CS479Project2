@@ -8,7 +8,8 @@
 #include <math.h>   
 #include <random>   
 #include <string>   
-#include <vector>   
+#include <vector>
+#include <set>   
 #include <armadillo>
 
 using namespace arma;
@@ -51,6 +52,7 @@ class Distribution
         void AddData(std::vector<double> data);
         void ImportData(std::string inputFilePath);
         void GetMatricesFromData();
+        void SetDataSize(size_t newSize);
 };
     
 #endif //DISTRIBUTION_H_

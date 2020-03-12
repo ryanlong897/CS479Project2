@@ -85,6 +85,7 @@ Distribution::~Distribution()
 void Distribution::PrintAll()
 {
     std::cout << "Data for Distribution " << GetInfo() << std::endl;
+	std::cout << "Size: " << m_data.size() << std::endl;
     std::cout << std::endl << "Mean Matrix:\n";
     m_meanMatrix.print();
     std::cout << "Covariance Matrix:\n";
@@ -426,6 +427,29 @@ void Distribution::GetMatricesFromData()
 			m_covarianceMatrix(i, j) = GetCovariance(i, j);
 		}
 	}
+}
+
+void Distribution::SetDataSize(size_t newSize)
+{
+	if (newSize >= m_data.size())
+	{
+		std::cerr << "Error, new size must be less than old size" << std::endl;
+		exit(1);
+	}
+	std::set<int> keptIndexes;
+	while (keptIndexes.size() != newSize)
+	{
+		double random = RandomNumberHelper();
+		keptIndexes.insert(random * m_data.size());
+	}
+	std::vector<std::vector<double>> newData;
+	for (auto i : keptIndexes)
+	{
+		newData.push_back(m_data[i]);
+	}
+
+	m_data.clear();
+	m_data = newData;
 }
 
 #endif //DISTRIBUTION_CPP_

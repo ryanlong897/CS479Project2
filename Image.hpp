@@ -56,6 +56,13 @@ enum ImageType: int
     PPM
 };
 
+enum ColourSpace: int
+{
+    RGBSpace,
+    YCbCr,
+    Greyscale
+};
+
 class Image
 {
     private:
@@ -65,6 +72,8 @@ class Image
         size_t m_colourDepth;
         size_t m_ID;
         ImageType m_type;
+        ColourSpace m_colourSpace;
+
         RGB** m_pixels; // [height][width]
 
         static size_t m_IDGen;
