@@ -30,6 +30,8 @@ class Distribution
         double BoxMuller(double m, double s);
         double GetMean(size_t variable);
         double GetCovariance(size_t var1, size_t var2);
+        std::vector<double> GetMean(std::vector<std::vector<double>> data);
+        std::vector<std::vector<double>> GetCovariance(std::vector<std::vector<double>> data);
 
     public:
         const size_t m_dimensions;

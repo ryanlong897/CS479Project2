@@ -42,15 +42,16 @@ int main(int argc, char* argv[])
         part1a_dist2.ImportData(INPUT_DIRECTORY + "part1_dist1.txt");
         part2a_dist1.ImportData(INPUT_DIRECTORY + "part2_dist0.txt");
         part2a_dist2.ImportData(INPUT_DIRECTORY + "part2_dist1.txt");
+        
+        part1a_dist1.GetMatricesFromData();
+        part1a_dist2.GetMatricesFromData();
+        part2a_dist1.GetMatricesFromData();
+        part2a_dist2.GetMatricesFromData();
+
+        int size = part1a_dist1.m_data.size();
 
         do
         {
-
-            part1a_dist1.GetMatricesFromData();
-            part1a_dist2.GetMatricesFromData();
-            part2a_dist1.GetMatricesFromData();
-            part2a_dist2.GetMatricesFromData();
-
             part1a_dist1.PrintAll();
             part1a_dist2.PrintAll();
             part2a_dist1.PrintAll();
@@ -93,14 +94,15 @@ int main(int argc, char* argv[])
             part1Classifier.CalculateBhattacharyyaBound();
             part2Classifier.CalculateBhattacharyyaBound();
 #endif
-            part1a_dist1.SetDataSize(part1a_dist1.m_data.size() / 10);
-            part1a_dist2.SetDataSize(part1a_dist2.m_data.size() / 10);
-            part2a_dist1.SetDataSize(part2a_dist1.m_data.size() / 10);
-            part2a_dist2.SetDataSize(part2a_dist2.m_data.size() / 10);
+            size /= 10;
+            part1a_dist1.SetDataSize(size);
+            part1a_dist2.SetDataSize(size);
+            part2a_dist1.SetDataSize(size);
+            part2a_dist2.SetDataSize(size);
 
             std::cout << "-------------------------------------------------------\n" << std::endl;
-
-        } while (part1a_dist1.m_data.size() >= 10);
+            std::cout << "Current Size: " << size << std::endl;
+        } while (size >= 10);
 
     }
 

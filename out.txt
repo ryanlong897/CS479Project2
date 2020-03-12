@@ -1,0 +1,335 @@
+Data for Distribution "Part1, Dist 1" [id: 0]
+Size: 100000
+
+Mean Matrix:
+   0.9943
+   1.0011
+Covariance Matrix:
+   0.9997  -0.0003
+  -0.0003   0.9983
+
+Data for Distribution "Part1, Dist 2" [id: 1]
+Size: 100000
+
+Mean Matrix:
+   3.9953
+   4.0015
+Covariance Matrix:
+   1.0014  -0.0042
+  -0.0042   0.9949
+
+Data for Distribution "Part2, Dist 1" [id: 2]
+Size: 100001
+
+Mean Matrix:
+   0.9943
+   1.0011
+Covariance Matrix:
+   0.9997  -0.0003
+  -0.0003   0.9983
+
+Data for Distribution "Part2, Dist 2" [id: 3]
+Size: 100000
+
+Mean Matrix:
+   3.9924
+   4.0211
+Covariance Matrix:
+   4.0051   0.1683
+   0.1683   8.0159
+
+Classifying "Part1, Dist 1" [id: 0] & "Part1, Dist 2" [id: 1] using priors: 
+P(w0) = 0.5, P(w1) = 0.5
+Classifying "Part2, Dist 1" [id: 2] & "Part2, Dist 2" [id: 3] using priors: 
+P(w2) = 0.5, P(w3) = 0.5
+Using a quadratic discriminant...
+Using a quadratic discriminant...
+num points on bound: 190
+num misclassified (0 as 1): 1671
+num misclassified (1 as 0): 1613
+Total Misclassified: 3284
+
+num points on bound: 552
+num misclassified (2 as 3): 3840
+num misclassified (3 as 2): 7941
+Total Misclassified: 11781
+
+Calculating Bhattacharyya Bound:
+Calculating Bhattacharyya Bound:
+k = k = 1.03012.25926
+Bhattacharyya Error: P(error) <= 0.178485
+
+
+Bhattacharyya Error: P(error) <= 0.052214
+
+-------------------------------------------------------
+
+Current Size: 10000
+Data for Distribution "Part1, Dist 1" [id: 0]
+Size: 100000
+
+Mean Matrix:
+   0.9969
+   1.0071
+Covariance Matrix:
+   0.9953  -0.0037
+  -0.0037   0.9998
+
+Data for Distribution "Part1, Dist 2" [id: 1]
+Size: 100000
+
+Mean Matrix:
+   3.9943
+   3.9949
+Covariance Matrix:
+   1.0031  -0.0100
+  -0.0100   0.9889
+
+Data for Distribution "Part2, Dist 1" [id: 2]
+Size: 100001
+
+Mean Matrix:
+   0.9716
+   1.0103
+Covariance Matrix:
+   0.9915   0.0065
+   0.0065   0.9964
+
+Data for Distribution "Part2, Dist 2" [id: 3]
+Size: 100000
+
+Mean Matrix:
+   4.0122
+   4.0439
+Covariance Matrix:
+   3.9900   0.2289
+   0.2289   7.9556
+
+Classifying "Part1, Dist 1" [id: 0] & "Part1, Dist 2" [id: 1] using priors: 
+P(w0) = 0.5, P(w1) = 0.5
+Classifying "Part2, Dist 1" [id: 2] & "Part2, Dist 2" [id: 3] using priors: 
+P(w2) = 0.5, P(w3) = 0.5
+Using a quadratic discriminant...
+Using a quadratic discriminant...
+num points on bound: 199
+num misclassified (0 as 1): 1660
+num misclassified (1 as 0): 1622
+Total Misclassified: 3282
+
+num points on bound: 557
+num misclassified (2 as 3): 3924
+num misclassified (3 as 2): 7928
+Total Misclassified: 11852
+
+Calculating Bhattacharyya Bound:
+Calculating Bhattacharyya Bound:
+k = 1.04156
+Bhattacharyya Error: P(error) <= 0.176451
+
+k = 2.26177
+Bhattacharyya Error: P(error) <= 0.0520831
+
+-------------------------------------------------------
+
+Current Size: 1000
+Data for Distribution "Part1, Dist 1" [id: 0]
+Size: 100000
+
+Mean Matrix:
+   1.0344
+   1.0167
+Covariance Matrix:
+   1.0185   0.0352
+   0.0352   0.9988
+
+Data for Distribution "Part1, Dist 2" [id: 1]
+Size: 100000
+
+Mean Matrix:
+   4.0620
+   3.9823
+Covariance Matrix:
+   1.0098   0.0280
+   0.0280   0.9809
+
+Data for Distribution "Part2, Dist 1" [id: 2]
+Size: 100001
+
+Mean Matrix:
+   0.9824
+   0.9653
+Covariance Matrix:
+   0.9950  -0.0178
+  -0.0178   0.9689
+
+Data for Distribution "Part2, Dist 2" [id: 3]
+Size: 100000
+
+Mean Matrix:
+   4.0746
+   3.8159
+Covariance Matrix:
+   3.9740   0.5748
+   0.5748   8.3602
+
+Classifying "Part1, Dist 1" [id: 0] & "Part1, Dist 2" [id: 1] using priors: 
+P(w0) = 0.5, P(w1) = 0.5
+Classifying "Part2, Dist 1" [id: 2] & "Part2, Dist 2" [id: 3] using priors: 
+P(w2) = 0.5, P(w3) = 0.5
+Using a quadratic discriminant...
+Using a quadratic discriminant...
+num points on bound: 205
+num misclassified (0 as 1): 1485
+num misclassified (1 as 0): 1790
+Total Misclassified: 3275
+
+num points on bound: 644
+num misclassified (2 as 3): 4343
+num misclassified (3 as 2): 7639
+Total Misclassified: 11982
+
+Calculating Bhattacharyya Bound:
+k = Calculating Bhattacharyya Bound:
+k = 1.00783
+Bhattacharyya Error: P(error) <= 0.182505
+
+2.17202
+Bhattacharyya Error: P(error) <= 0.0569734
+
+-------------------------------------------------------
+
+Current Size: 100
+Data for Distribution "Part1, Dist 1" [id: 0]
+Size: 100000
+
+Mean Matrix:
+   0.9071
+   0.9652
+Covariance Matrix:
+   1.0102  -0.1115
+  -0.1115   0.9447
+
+Data for Distribution "Part1, Dist 2" [id: 1]
+Size: 100000
+
+Mean Matrix:
+   4.1279
+   4.0169
+Covariance Matrix:
+   1.0006  -0.0517
+  -0.0517   0.8185
+
+Data for Distribution "Part2, Dist 1" [id: 2]
+Size: 100001
+
+Mean Matrix:
+   0.9070
+   1.0366
+Covariance Matrix:
+   0.9871  -0.0157
+  -0.0157   0.9890
+
+Data for Distribution "Part2, Dist 2" [id: 3]
+Size: 100000
+
+Mean Matrix:
+   4.3251
+   3.8105
+Covariance Matrix:
+   4.0640  -3.4753
+  -3.4753   7.3449
+
+Classifying "Part1, Dist 1" [id: 0] & "Part1, Dist 2" [id: 1] using priors: 
+P(w0) = Classifying "Part2, Dist 1" [id: 2] & "Part2, Dist 2" [id: 3] using priors: 
+P(w2) = 0.5, P(w3) = 0.5
+0.5, P(w1) = 0.5
+Using a quadratic discriminant...
+Using a quadratic discriminant...
+num points on bound: 152
+num misclassified (0 as 1): 1613
+num misclassified (1 as 0): 1681
+Total Misclassified: 3294
+
+num points on bound: 250
+num misclassified (2 as 3): 2084
+num misclassified (3 as 2): 14722
+Total Misclassified: 16806
+
+Calculating Bhattacharyya Bound:
+k = Calculating Bhattacharyya Bound:
+k = 1.98465
+Bhattacharyya Error: P(error) <= 0.0687146
+
+2.85952
+Bhattacharyya Error: P(error) <= 0.0286483
+
+-------------------------------------------------------
+
+Current Size: 10
+Data for Distribution "Part1, Dist 1" [id: 0]
+Size: 100000
+
+Mean Matrix:
+   1.3877
+   1.0279
+Covariance Matrix:
+   0.9336   0.1411
+   0.1411   0.9794
+
+Data for Distribution "Part1, Dist 2" [id: 1]
+Size: 100000
+
+Mean Matrix:
+   4.1202
+   4.0426
+Covariance Matrix:
+   0.9225  -0.2904
+  -0.2904   0.6536
+
+Data for Distribution "Part2, Dist 1" [id: 2]
+Size: 100001
+
+Mean Matrix:
+   1.2343
+   1.0534
+Covariance Matrix:
+   1.2214  -0.1010
+  -0.1010   0.7528
+
+Data for Distribution "Part2, Dist 2" [id: 3]
+Size: 100000
+
+Mean Matrix:
+   2.3274
+   5.8567
+Covariance Matrix:
+   1.8490  -2.0600
+  -2.0600   6.9859
+
+Classifying "Part1, Dist 1" [id: 0] & "Part1, Dist 2" [id: 1] using priors: 
+P(w0) = 0.5, P(w1) = 0.5
+Classifying "Part2, Dist 1" [id: 2] & "Part2, Dist 2" [id: 3] using priors: 
+P(w2) = 0.5, P(w3) = 0.5
+Using a quadratic discriminant...
+Using a quadratic discriminant...
+num points on bound: 233
+num misclassified (0 as 1): 414
+num misclassified (1 as 0): 5578
+Total Misclassified: 5992
+
+num points on bound: 355
+num misclassified (2 as 3): 2435
+num misclassified (3 as 2): 13689
+Total Misclassified: 16124
+
+Calculating Bhattacharyya Bound:
+k = 2.66867
+Bhattacharyya Error: P(error) <= 0.0346721
+
+Calculating Bhattacharyya Bound:
+k = 1.61106
+Bhattacharyya Error: P(error) <= 0.0998384
+
+-------------------------------------------------------
+
+Current Size: 1

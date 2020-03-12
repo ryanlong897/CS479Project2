@@ -436,20 +436,79 @@ void Distribution::SetDataSize(size_t newSize)
 		std::cerr << "Error, new size must be less than old size" << std::endl;
 		exit(1);
 	}
+
 	std::set<int> keptIndexes;
 	while (keptIndexes.size() != newSize)
 	{
 		double random = RandomNumberHelper();
 		keptIndexes.insert(random * m_data.size());
 	}
+	
 	std::vector<std::vector<double>> newData;
 	for (auto i : keptIndexes)
 	{
 		newData.push_back(m_data[i]);
 	}
+	
+	std::vector<double> mean = GetMean(newData);
 
-	m_data.clear();
-	m_data = newData;
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		m_meanMatrix(i) = mean[i];
+	}
+
+	std::vector<std::vector<double>> cov = GetCovariance(newData);
+
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		for (size_t j = 0; j < m_dimensions; j++)
+		{
+			m_covarianceMatrix(i, j) = cov[i][j];
+		}
+	}
+}
+
+std::vector<double> Distribution::GetMean(std::vector<std::vector<double>> data)
+{
+	std::vector<double> mean;
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		mean.push_back(0);
+		for (size_t j = 0; j < data.size(); j++)
+		{
+			mean[i] += data[j][i];
+		}
+		mean[i] /= data.size();
+	}
+	return mean;
+}
+
+
+std::vector<std::vector<double>> Distribution::GetCovariance(std::vector<std::vector<double>> data)
+{
+	std::vector<std::vector<double>> covariance;
+
+	for (size_t i = 0; i < m_dimensions; i++)
+	{
+		covariance.push_back(std::vector<double>());
+		for (size_t j = 0; j < m_dimensions; j++)
+		{
+			covariance[i].push_back(0);
+			for (size_t k = 0; k < data.size(); k++)
+			{
+				covariance[i][j] += (data[k][i] - m_meanMatrix(i)) * (data[k][j] - m_meanMatrix(j));
+			}
+			if (i == j)
+			{
+				covariance[i][j] = std::sqrt(covariance[i][j] / data.size());
+			}
+			else 
+			{
+				covariance[i][j] /= data.size();
+			}
+		}
+	}
+	return covariance;
 }
 
 #endif //DISTRIBUTION_CPP_
